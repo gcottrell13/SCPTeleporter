@@ -32,6 +32,9 @@
     <Reference Include="UnityEngine.UnityWebRequestModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
+    <Reference Include="SCPStore">
+      <HintPath>$(EXILED_REFERENCES)\Release\net48\SCPStore.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

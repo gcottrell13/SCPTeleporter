@@ -56,7 +56,11 @@ internal static class EventHandlers
                         lastTeleports[player] = target;
                         tp.SetUsed();
                         lastTeleportTimes[player] = DateTime.Now;
-                        player.Position = target.Position;
+                        player.EnableEffect(Exiled.API.Enums.EffectType.Flashed, 1.0f);
+                        Timing.CallDelayed(0.5f, () =>
+                        {
+                            player.Position = target.Position;
+                        });
                         return;
                     }
                     else

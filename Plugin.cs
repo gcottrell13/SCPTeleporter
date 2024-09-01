@@ -18,6 +18,8 @@ internal class SCPTeleporter : Plugin<Config, Translation>
         ServerEvent.RoundEnded += EventHandlers.OnRoundEnded;
         PlayerEvent.ChangedItem += EventHandlers.OnSwitchItem;
         PlayerEvent.UsingItemCompleted += EventHandlers.OnUseItem;
+
+        SCPStore.Store.RegisterCustomItem(new TeleporterStoreItem());
         base.OnEnabled();
     }
 
@@ -28,6 +30,7 @@ internal class SCPTeleporter : Plugin<Config, Translation>
         ServerEvent.RoundEnded -= EventHandlers.OnRoundEnded;
         PlayerEvent.ChangedItem -= EventHandlers.OnSwitchItem;
         PlayerEvent.UsingItemCompleted -= EventHandlers.OnUseItem;
+        SCPStore.Store.UnregisterCustomItem(new TeleporterStoreItem());
         base.OnDisabled();
     }
 
