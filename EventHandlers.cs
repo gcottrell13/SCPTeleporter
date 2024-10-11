@@ -35,7 +35,8 @@ internal static class EventHandlers
 
         void _playerTryTp(Player player)
         {
-            foreach (Teleporter tp in Teleporters.Where(tp => tp.Usable))
+            var usableTeleporters = Teleporters.Where(tp => tp.Active && tp.CanBeUsedBy(player)).ToList();
+            foreach (Teleporter tp in usableTeleporters)
             {
                 if (lastTeleports.TryGetValue(player, out var lastTp) && lastTp == tp)
                     continue;
@@ -46,7 +47,7 @@ internal static class EventHandlers
                 {
                     // teleport to another random teleporter
 
-                    if (Teleporters.Except(new[] { tp }).GetRandomValue() is Teleporter target)
+                    if (usableTeleporters.Except(new[] { tp }).GetRandomValue() is Teleporter target)
                     {
                         if (lastTeleportTimes.TryGetValue(player, out var lastTime) && (DateTime.Now - lastTime).TotalSeconds < 7)
                         {
@@ -55,6 +56,7 @@ internal static class EventHandlers
                         }
                         lastTeleports[player] = target;
                         tp.SetUsed();
+                        target.SetUsed();
                         lastTeleportTimes[player] = DateTime.Now;
                         player.EnableEffect(Exiled.API.Enums.EffectType.Flashed, 1.0f);
                         Timing.CallDelayed(0.5f, () =>
@@ -104,7 +106,8 @@ internal static class EventHandlers
 
     public static int CreateTeleporter(Player player)
     {
-        var tp = new Teleporter(TeleportersCount++);
+        var tp = new Teleporter(TeleportersCount++, player);
+        tp.SetUsed();
         tp.Position = player.Position + UnityEngine.Vector3.down * 0.5f;
         Teleporters.Add(tp);
         return tp.Id;
